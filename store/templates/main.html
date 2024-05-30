@@ -1,0 +1,108 @@
+{% extends 'master.html' %}
+
+{% block title %}
+    eCommerce
+{% endblock %}
+{% block content %}
+<div class="product-grid">
+    <h2>Our Products</h2>
+    <div class="products">
+        {% for i in product %}
+            {% if i.is_sale %}
+                <div class="product on-sale">
+                    <img src="{{ i.image.url }}" alt="{{ i.name }}">
+                    <p>{{ i.name }}</p>
+                    <strike class="old-price">zł{{ i.price }}</strike>
+                    <p>zł{{ i.sale_price }}</p>
+                    <a href="{% url 'product_info' i.id %}"><button>View Product</button></a>
+                </div>
+            {% else %}
+                <div class="product">
+                    <img src="{{ i.image.url }}" alt="{{ i.name }}">
+                    <p>{{ i.name }}</p>
+                    <p>zł&nbsp;{{ i.price }}</p>
+                    <a href="{% url 'product_info' i.id %}"><button>View Product</button></a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.product-grid {
+    text-align: center;
+    padding: 20px;
+}
+.products {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.product {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 200px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    position: relative; /* Needed to position the icon */
+    transition: 0.3s;
+}
+.product img {
+    width: 100%;
+    height: auto;
+}
+.product p {
+    margin: 10px 0;
+}
+.product button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+.product:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+.old-price {
+    color: #000000;
+    text-decoration: line-through;
+    font-size: 14px;
+    margin: 0 auto;
+}
+.on-sale::before {
+    content: "\1F4B8"; /* Unicode for a sale tag emoji or you can use a different icon */
+    font-size: 24px; /* Adjust size as needed */
+    color: #000000; /* Icon color */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+@media (max-width: 600px) {
+    .products {
+        flex-direction: column;
+        align-items: center;
+    }
+    .product {
+        width: 90%;
+        margin: 10px 0;
+        padding: 15px;
+    }
+    .product button {
+        font-size: 14px;
+        padding: 8px 20px;
+    }
+    .old-price {
+        font-size: 12px;
+    }
+}
+</style>
+{% endblock %}

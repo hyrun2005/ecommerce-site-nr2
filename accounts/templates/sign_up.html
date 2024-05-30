@@ -1,0 +1,117 @@
+{% extends 'master_acc.html' %}
+
+{% block title %}
+Registration
+{% endblock %}
+
+{% block content %}
+    <style>
+        /* Additional styles for the registration form */
+        .reg {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: stretch;
+        }
+        .reg_form{
+            margin-left: 30px;
+        }
+        .reg h1 {
+            text-align: center;
+            margin-right: 30px;
+        }
+        .reg_form form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            max-width: 100%;
+        }
+
+        .reg_form h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .reg_form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .reg_form input[type="text"],
+        .reg_form input[type="email"],
+        .reg_form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .reg_form button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .reg_form button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .user_log {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .user_log a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        .leftSide_form {
+            display: flex;
+            flex-direction: row;
+
+        }
+    </style>
+<div class="reg">
+    <div class="lefSide_form">
+        <h1>Registration:</h1>
+    </div>
+    <div class="reg_form">
+        <form method="POST" action="">
+            {% csrf_token %}
+            <label for="id_username">Username:</label>
+            {{ form.username }}
+
+            <label for="id_firstname">First Name:</label>
+            {{ form.first_name }}
+
+            <label for="id_lastname">Last Name:</label>
+            {{ form.last_name }}
+
+            <label for="id_email">Email:</label>
+            {{ form.email }}
+
+            <label for="id_password1">Password:</label>
+            {{ form.password1 }}
+
+            <label for="id_password2">Confirm Password:</label>
+            {{ form.password2 }}
+
+            <button type="submit">Register</button>
+        </form>
+
+        <div class="user_log"> Have already an account! <a href="../login/">Log in</a></div>
+
+    </div>
+</div>
+{% endblock %}

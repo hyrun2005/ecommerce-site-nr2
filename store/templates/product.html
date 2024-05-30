@@ -1,0 +1,129 @@
+{% extends 'master.html' %}
+{% load static %}
+{% block title %}
+    {{ product.name }}
+{% endblock %}
+
+{% block content %}
+<div class="product-detail">
+    <div class="product-detail-container">
+        <div class="product-image">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        </div>
+        <div class="product-info">
+            <h1>{{ product.name }}</h1>
+            <p class="product-description">{{ product.description }}</p>
+            <div class="product-price-container">
+                <p class="product-price">Cena: {{ product.price }} zł</p>
+                <div class="product-actions">
+                    <button id="add-to-cart" value="{{ product.id }}">Dodaj do koszyka</button>
+                    <button class="add-to-favorites" onclick="toggleFavorite(this)">
+                        <img src="{% static 'img/unfilled.png' %}" alt="Dodaj do ulubionych" id="favorite-icon">
+                    </button>
+                </div>
+            </div>
+            <p class="product-availability">Dostępność: <span>{{ availability }}</span></p>
+        </div>
+    </div>
+</div>
+
+<style>
+.product-detail {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+.product-detail-container {
+    display: flex;
+    flex-direction: row;
+    max-width: 1200px;
+    width: 100%;
+    padding: 20px;
+}
+.product-image {
+    flex: 1;
+    text-align: center;
+    padding: 20px;
+}
+.product-image img {
+    max-width: 100%;
+    height: auto;
+}
+.product-info {
+    flex: 2;
+    padding: 20px;
+}
+.product-info h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+.product-description, .product-price, .product-availability {
+    margin-bottom: 10px;
+}
+.product-price {
+    font-size: 20px;
+    font-weight: bold;
+}
+.product-actions {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+.add-to-favorites {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.add-to-favorites img {
+    width: 24px;
+    height: 24px;
+}
+#add-to-cart {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+#add-to-cart:hover {
+    background-color: #45a049;
+}
+</style>
+
+<script>
+function toggleFavorite(button) {
+    const icon = button.querySelector('img');
+    if (icon.src.includes('unfilled.png')){
+        icon.src = "{% static 'img/filled.png' %}";
+    } else {
+        icon.src = "{% static 'img/unfilled.png' %}";
+    }
+}
+
+
+$(document).on('click', '#add-to-cart', function(e){
+    e.preventDefault();
+
+    $.ajax({
+        type: 'POST',
+        url: '{% url "cart_add" %}',
+        data: {
+            product_id: $("#add-to-cart").val(),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            action: 'post'
+        },
+
+        success: function (json){
+            document.getElementById('cart_quantity').textContent = json.CartQuantity
+        },
+
+        error: function (xhr, errmsg, err){
+
+        }
+    });
+})
+</script>
+{% endblock %}

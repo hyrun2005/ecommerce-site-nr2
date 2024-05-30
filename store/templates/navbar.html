@@ -1,0 +1,188 @@
+{% load static %}
+<style>
+    body, html {
+        font-family: "Montserrat", sans-serif;
+        font-optical-sizing: auto;
+        margin: 0 auto;
+        padding: 0;
+    }
+    .top-menu {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #333;
+        color: #fff;
+        height: 20px;
+    }
+    .brand-name {
+        font-size: 1.5em;
+    }
+    .right-menu {
+        display: flex;
+        align-items: center;
+    }
+    .button {
+        padding: 7px 10px;
+        border: none;
+        color: #fff;
+        text-decoration: none;
+        cursor: pointer;
+        margin-bottom: 5px; /* Added margin bottom for spacing */
+        display: block; /* Display buttons as block elements */
+    }
+    .avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        overflow: hidden;
+        cursor: pointer;
+    }
+    .mini-menu {
+        position: absolute;
+        top: 40px;
+        right: 20px;
+        padding: 10px;
+        display: none;
+        border-style: solid;
+        border-width: 0 1px;
+        border-color: darkgray;
+        background-color: #fff; /* Set background color to white */
+        color: black; /* Set text color to black */
+    }
+    .mini-menu a {
+        color: darkgray;
+        text-decoration: none;
+        transition: color 1s; /* Transition the color and text-decoration-color properties */
+    }
+    .mini-menu a:hover {
+        color: black; /* Change color on hover */
+    }
+    .user {
+        margin-right: 20px;
+    }
+    .reg a, .logIn a {
+        text-decoration: none;
+        color: white;
+        margin-left: 30px;
+        padding: 0 13px;
+    }
+    /* Additional styles for the bigger menu */
+    .categories {
+        background-color: white; /* Set background color to white */
+        color: black; /* Set text color to black */
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px;
+    }
+    .categories a {
+        color: black; /* Set link color to black */
+        text-decoration: none;
+        margin-right: 20px;
+    }
+    .search_basket {
+        display: flex;
+        align-items: center;
+    }
+    .ico_search {
+        border: none;
+        background: none;
+        cursor: pointer;
+        margin: 0;
+        padding: 0;
+        vertical-align: middle; /* Align vertically with the search input */
+    }
+    #search {
+        margin-right: 20px;
+    }
+    .cart-button {
+        display: flex;
+        align-items: center;
+        background-color: #ffffff;
+        color: #000000;
+        border: none;
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+    .cart-count {
+        background-color: black;
+        color: white;
+        border-radius: 50%;
+        padding: 3px 6px;
+        top: -10px;
+        right: -10px;
+        font-size: 12px;
+    }
+    .cart-button img {
+        margin-right: 5px;
+    }
+    .cart-button .cart-text {
+        margin-right: 5px;
+    }
+    .brand-name a {
+        text-decoration: none;
+        color: white;
+    }
+</style>
+<div class="top-menu">
+    <!-- Left side: Brand name -->
+    <div class="brand-name"><a href="{% url 'main' %}">ElectroSphere</a></div>
+
+    <!-- Right side: Avatar and mini menu -->
+    <div class="right-menu">
+        {% if not user.is_authenticated %}
+            <span class="reg"><a href="{% url 'registration' %}">Register</a></span>
+            <span class="logIn"><a href="{% url 'login' %}">Login</a></span>
+        {% else %}
+            <span class="user">Hello, {{ user }}</span>
+            <div class="avatar" id="avatar">
+                <img src="https://i.pinimg.com/474x/25/1c/e1/251ce139d8c07cbcc9daeca832851719.jpg" height="30px" alt="Avatar">
+            </div>
+        {% endif %}
+
+        <!-- Mini menu -->
+        <div class="mini-menu" id="mini-menu">
+            <span><a href='' class="button">Settings</a></span>
+            <span><a href="" class="button">Profile</a></span>
+            <span><a href="{% url 'logout' %}" class="button" id="logout-button">Logout</a></span>
+        </div>
+    </div>
+</div>
+
+<!-- Bigger menu -->
+<div class="categories">
+    <div>
+        <a href="{% url 'categories' 'TV-Audio-RTV' %}">TV, Audio i RTV</a>
+        <a href="{% url 'categories' 'Gaming'%}">Gaming</a>
+        <a href="{% url 'categories' 'SmartPhones'%}">SmartPhones</a>
+        <a href="{% url 'categories' 'Computers'%}" >Computers</a>
+        <a href="{% url 'categories' 'SmartWatches'%}" >SmartWatches</a>
+        <a href="{% url 'categories' 'Cameras'%}" >Cameras</a>
+    </div>
+    <div class="search_basket">
+        <form method="POST" id="search">
+            {% csrf_token %}
+            <input type="text" placeholder="Search">
+            <button type="submit" class="ico_search"><img src="https://img.icons8.com/?size=256&id=59878&format=png" height="20px"></button>
+        </form>
+        <a href="{% url 'cart_summary' %}">
+        <button class="cart-button">
+            <img src="../../media/uploads/360_F_631788778_jbL4ZKDb5q1pQVst2lpEg7XFGKLpupBE.jpg" height="20px" alt="Basket Icon">&nbsp;
+            <span class="cart-text">Cart</span>&nbsp;
+            <span class="cart-count" id="cart_quantity">{{ cart|length }}</span>
+        </button></a>
+    </div>
+</div>
+
+<script>
+    document.getElementById('avatar').addEventListener('click', function() {
+        var miniMenu = document.getElementById('mini-menu');
+        if (miniMenu.style.display === 'none' || miniMenu.style.display === '') {
+            miniMenu.style.display = 'block';
+        } else {
+            miniMenu.style.display = 'none';
+        }
+    });
+</script>
